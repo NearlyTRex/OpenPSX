@@ -1,0 +1,13 @@
+README for OpenPSX::DBios
+Copyright 2001, OpenPSX team.  All rights reserved.
+
+For details on redistribution, please read the LICENSE file also included in this directory.
+
+Synopsis: DBios is defined in order to facilitate the decompilation/disassembly of PSX binary images in 
+order to understand what environment variables and functions are necessary for a PSX game to execute correctly.
+
+Note: This specific tool for OpenPSX provides NO BIOS for use.  I will NOT distribute any such files as 
+part of this project, and even if I were to  have any, and will promptly ignore and/or delete any and all
+requests  for such  files.  Please  do  not ask  me for  them.  It  is possible to obtain a BIOS for a 
+playstation that you already own, but the details of this process are beyond this document and this project.
+If you wish to know how to do something like this, ask around.  You'll probably find someone with an answer.

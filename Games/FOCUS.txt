@@ -1,0 +1,7 @@
+FOCUS for directory /Games
+
+Updated: 7/31/2002
+
+Until some of the tools in /Tools are completed to the point of
+usability, there isn't much that can be done to work on any particular
+ported game yet. 

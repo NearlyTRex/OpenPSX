@@ -1,0 +1,133 @@
+####################
+# Makefile for PSTool
+# Unix
+####################
+# Program variables
+####################
+FINAL        = PSTool
+CC           = g++
+CCOPTS       = -c
+CCSHARED     = -shared
+CCOUT        = -o
+SWIG         = swig
+SWOPTS       = -c++ -python -shadow
+SWOUT        = -o
+PYINC        = /usr/include/python2.2
+DEL          = rm
+SO           = .so
+O            = .o
+####################
+PYPSMEMFINAL = PSMemc$(SO)
+PYDIMAGFINAL = DImagec$(SO)
+PYFINALS     = $(PYPSMEMFINAL) $(PYDIMAGFINAL)
+PSMEMWRAPOBJ = PSMem_wrap$(O)
+DIMAGWRAPOBJ = DImage_wrap$(O)
+####################
+DIMAGEOBJS1  = DImage$(O) DImageDecompileBIOS$(O) DImageDecompileEXE$(O) DImageDecompileSF$(O)
+DIMAGEOBJS2  = DImageOpcode2String$(O) DImageWriteLine$(O) DImageisJump$(O) DImageGetFunction$(O) DImageSwapBytes$(O)
+PSMEMOBJS    = PSMem$(O) PSMemLoad$(O) PSMemMisc$(O) PSMemStore$(O) PSMemUtil$(O) PSMemControlMem$(O)
+PSXEXCOBJS   = PSXException$(O)
+STRTOKOBJS   = StringTokenizer$(O) StringTokenizerTokenize$(O) StringTokenizerOps$(O)
+PSTOOLOBJS   = PSToolPrintCmds$(O) PSToolStr2Num$(O) PSToolDoDImageAction$(O) PSToolDoPSMemAction$(O) main$(O)
+OBJECTS      = $(DIMAGEOBJS1) $(DIMAGEOBJS2) $(PSMEMOBJS) $(STRTOKOBJS) $(PSXEXCOBJS) $(PSTOOLOBJS)
+####################
+# Rules
+####################
+all: $(FINAL) $(PYPSMEMFINAL) $(PYDIMAGFINAL)
+
+$(FINAL): $(OBJECTS)
+	$(CC) $(OBJECTS) $(CCOUT) $(FINAL)
+####################
+$(PYPSMEMFINAL): $(PSMEMWRAPOBJ) $(PSMEMOBJS) $(PSXEXCOBJS)
+	$(CC) $(CCSHARED) $(PSMEMWRAPOBJ) $(PSMEMOBJS) $(PSXEXCOBJS) $(CCOUT) $(PYPSMEMFINAL)
+	
+$(PYDIMAGFINAL): $(DIMAGWRAPOBJ) $(DIMAGEOBJS1) $(DIMAGEOBJS2) $(PSXEXCOBJS)
+	$(CC) $(CCSHARED) $(DIMAGWRAPOBJ) $(DIMAGEOBJS1) $(DIMAGEOBJS2) $(PSMEMOBJS) $(PSXEXCOBJS) $(CCOUT) $(PYDIMAGFINAL)
+####################
+main$(O): main.cpp
+	$(CC) $(CCOPTS) main.cpp
+####################
+$(PSMEMWRAPOBJ): PSMem_wrap.cpp
+	$(CC) $(CCOPTS) PSMem_wrap.cpp -I$(PYINC)
+
+PSMem_wrap.cpp: PSMem.i
+	$(SWIG) $(SWOPTS) $(SWOUT) PSMem_wrap.cpp PSMem.i
+####################
+$(DIMAGWRAPOBJ): DImage_wrap.cpp
+	$(CC) $(CCOPTS) DImage_wrap.cpp -I$(PYINC)
+
+DImage_wrap.cpp: DImage.i
+	$(SWIG) $(SWOPTS) $(SWOUT) DImage_wrap.cpp DImage.i
+####################
+PSXException$(O): PSXException.cpp
+	$(CC) $(CCOPTS) PSXException.cpp
+####################
+StringTokenizer$(O): StringTokenizer.cpp
+	$(CC) $(CCOPTS) StringTokenizer.cpp
+
+StringTokenizerTokenize$(O): StringTokenizerTokenize.cpp
+	$(CC) $(CCOPTS) StringTokenizerTokenize.cpp
+
+StringTokenizerOps$(O): StringTokenizerOps.cpp
+	$(CC) $(CCOPTS) StringTokenizerOps.cpp
+####################
+PSToolPrintCmds$(O): PSToolPrintCmds.cpp
+	$(CC) $(CCOPTS) PSToolPrintCmds.cpp
+
+PSToolStr2Num$(O): PSToolStr2Num.cpp
+	$(CC) $(CCOPTS) PSToolStr2Num.cpp
+
+PSToolDoDImageAction$(O): PSToolDoDImageAction.cpp
+	$(CC) $(CCOPTS) PSToolDoDImageAction.cpp
+
+PSToolDoPSMemAction$(O): PSToolDoPSMemAction.cpp
+	$(CC) $(CCOPTS) PSToolDoPSMemAction.cpp
+####################
+PSMem$(O): PSMem.cpp
+	$(CC) $(CCOPTS) PSMem.cpp
+
+PSMemLoad$(O): PSMemLoad.cpp
+	$(CC) $(CCOPTS) PSMemLoad.cpp
+
+PSMemMisc$(O): PSMemMisc.cpp
+	$(CC) $(CCOPTS) PSMemMisc.cpp
+
+PSMemStore$(O): PSMemStore.cpp
+	$(CC) $(CCOPTS) PSMemStore.cpp
+
+PSMemUtil$(O): PSMemUtil.cpp
+	$(CC) $(CCOPTS) PSMemUtil.cpp
+
+PSMemControlMem$(O): PSMemControlMem.cpp
+	$(CC) $(CCOPTS) PSMemControlMem.cpp
+####################
+DImage$(O): DImage.cpp
+	$(CC) $(CCOPTS) DImage.cpp
+
+DImageDecompileBIOS$(O): DImageDecompileBIOS.cpp
+	$(CC) $(CCOPTS) DImageDecompileBIOS.cpp
+
+DImageDecompileEXE$(O): DImageDecompileEXE.cpp
+	$(CC) $(CCOPTS) DImageDecompileEXE.cpp
+
+DImageDecompileSF$(O): DImageDecompileSF.cpp
+	$(CC) $(CCOPTS) DImageDecompileSF.cpp
+
+DImageOpcode2String$(O): DImageOpcode2String.cpp
+	$(CC) $(CCOPTS) DImageOpcode2String.cpp
+
+DImageWriteLine$(O): DImageWriteLine.cpp
+	$(CC) $(CCOPTS) DImageWriteLine.cpp
+
+DImageisJump$(O): DImageisJump.cpp
+	$(CC) $(CCOPTS) DImageisJump.cpp
+	
+DImageGetFunction$(O): DImageGetFunction.cpp
+	$(CC) $(CCOPTS) DImageGetFunction.cpp
+
+DImageSwapBytes$(O): DImageSwapBytes.cpp
+	$(CC) $(CCOPTS) DImageSwapBytes.cpp
+####################
+clean:
+	$(DEL) *$(O) *$(SO) *.pyc $(FINAL) $(PYPSMEMFINAL) $(PYDIMAGFINAL)
+####################
